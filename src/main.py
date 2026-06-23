@@ -7,5 +7,7 @@ G = nx.Graph()
 G.add_edges_from(edge_list)
 
 nx.draw_spring(G, with_labels=True)
-plt.show()
+# plt.show()
 plt.savefig("graph.png")
+
+nx.draw
