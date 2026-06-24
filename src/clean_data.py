@@ -37,6 +37,7 @@ def clean_data(data: dict):
         for exp in person.get("experience", []):
             experiences.append({
                 "person_id": person_id,
+                "person_name": person.get("full_name"),
                 "company": exp.get("company", {}).get("name"),
                 "title": exp.get("title"),
                 "status": exp.get("status"),
