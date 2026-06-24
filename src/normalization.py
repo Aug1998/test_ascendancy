@@ -1,4 +1,5 @@
 import pandas as pd
+import json
 
 def get_normalized_list(list) :
     # 1. Sort by lenghortest first) so root brands become keys first
@@ -19,5 +20,8 @@ def get_normalized_list(list) :
         # If it's a completely new brand name, it becomes its own canonical root
         if not found_match:
             mapped_names[name] = name
+
+    with open("datas.json", "w") as json_file:
+        json.dump(mapped_names, json_file, indent=4)
 
     return mapped_names
