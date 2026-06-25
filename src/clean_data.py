@@ -4,9 +4,16 @@ def clean_data(data: dict):
     educations = []
     companies = []
     schools = []
-    
-    for person in data["data"]:
+
+    records = data.get("data", []) if isinstance(data, dict) else []
+
+    for person in records:
+        if not isinstance(person, dict):
+            continue
+
         person_id = person.get("id")
+        social_media = person.get("social_media")
+        social_media = social_media if isinstance(social_media, list) else []
 
         # Person table
         people.append({
@@ -18,27 +25,34 @@ def clean_data(data: dict):
             "followers": next(
                 (
                     sm.get("followers")
-                    for sm in person.get("social_media", [])
-                    if sm.get("network") == "linkedin"
+                    for sm in social_media
+                    if isinstance(sm, dict) and sm.get("network") == "linkedin"
                 ),
                 None,
             ),
             "connections": next(
                 (
                     sm.get("connections")
-                    for sm in person.get("social_media", [])
-                    if sm.get("network") == "linkedin"
+                    for sm in social_media
+                    if isinstance(sm, dict) and sm.get("network") == "linkedin"
                 ),
                 None,
             ),
         })
 
         # Experience table
-        for exp in person.get("experience", []):
+        experience_items = person.get("experience")
+        experience_items = experience_items if isinstance(experience_items, list) else []
+        for exp in experience_items:
+            if not isinstance(exp, dict):
+                continue
+
+            company = exp.get("company")
+            company = company if isinstance(company, dict) else {}
             experiences.append({
                 "person_id": person_id,
                 "person_name": person.get("full_name"),
-                "company": exp.get("company", {}).get("name"),
+                "company": company.get("name"),
                 "title": exp.get("title"),
                 "status": exp.get("status"),
                 "start_date": exp.get("start_date"),
@@ -52,10 +66,17 @@ def clean_data(data: dict):
             })
 
         # Education table
-        for edu in person.get("education", []):
+        education_items = person.get("education")
+        education_items = education_items if isinstance(education_items, list) else []
+        for edu in education_items:
+            if not isinstance(edu, dict):
+                continue
+
+            school = edu.get("school")
+            school = school if isinstance(school, dict) else {}
             educations.append({
                 "person_id": person_id,
-                "school": edu.get("school", {}).get("name"),
+                "school": school.get("name"),
                 "degree": (
                     edu.get("degrees", [None])[0]
                     if edu.get("degrees")

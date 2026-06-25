@@ -1,25 +1,35 @@
-import pandas as pd
 import re
 
-def get_normalized_list(list) :
-    # 1. Sort by length (shortest first) so root brands become keys first
-    sorted_list = sorted(pd.DataFrame(list).dropna()[0], key=len)
-    mapped_names = {}
+def get_normalized_list(values):
+    # Keep only non-empty strings and normalize surrounding whitespace.
+    raw_names = [name for name in values if isinstance(name, str)]
+    normalized_unique = {name.strip() for name in raw_names if name.strip()}
 
-    # 2. Match names based on shared starting words (case-insensitive)
-    for name in sorted_list:
-        found_match = False
-        normalized_name = name.strip()
+    # Sort by length (shortest first) so root brands become canonical first.
+    sorted_names = sorted(normalized_unique, key=lambda n: (len(n), n.casefold()))
 
-        for canonical in mapped_names.keys():
-            pattern = rf'^{re.escape(canonical.strip())}(\b|$)'
+    canonical_roots = []
+    normalized_mapping = {}
+
+    # Match names based on shared starting words (case-insensitive).
+    for normalized_name in sorted_names:
+        canonical_match = None
+
+        for canonical in canonical_roots:
+            pattern = rf"^{re.escape(canonical)}(\b|$)"
             if re.match(pattern, normalized_name, flags=re.IGNORECASE):
-                mapped_names[name] = canonical
-                found_match = True
+                canonical_match = canonical
                 break
 
-        # If it's a completely new brand name, it becomes its own canonical root
-        if not found_match:
-            mapped_names[name] = name
+        if canonical_match is None:
+            canonical_match = normalized_name
+            canonical_roots.append(canonical_match)
 
-    return mapped_names
+        normalized_mapping[normalized_name] = canonical_match
+
+    # Return mapping for original names while reusing the normalized canonical lookup.
+    return {
+        original_name: normalized_mapping[original_name.strip()]
+        for original_name in raw_names
+        if original_name.strip()
+    }
