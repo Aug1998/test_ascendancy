@@ -6,10 +6,9 @@ def clean_data(data: dict):
     schools = []
 
     records = data.get("data", []) if isinstance(data, dict) else []
+    valid_people = (person for person in records if isinstance(person, dict))
 
-    for person in records:
-        if not isinstance(person, dict):
-            continue
+    for person in valid_people:
 
         person_id = person.get("id")
         social_media = person.get("social_media")
@@ -64,6 +63,7 @@ def clean_data(data: dict):
                     else None
                 ),
             })
+            companies.append(company.get("name"))
 
         # Education table
         education_items = person.get("education")
@@ -90,14 +90,7 @@ def clean_data(data: dict):
                 "start_date": edu.get("start_date"),
                 "end_date": edu.get("end_date"),
             })
-
-    # Companies table
-    for experience in experiences:
-        companies.append(experience.get("company"))
-    
-    # Schools table
-    for education in educations:
-        schools.append(education.get("school"))
+            schools.append(school.get("name"))
     
     return {
         "people": people,

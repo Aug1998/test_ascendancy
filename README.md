@@ -99,7 +99,7 @@ jupyter lab
 
 Then open `Jupyter.ipynb` and run cells top-to-bottom.
 
-### Option B: Install Jupyter Notebook extension in your IDE
+### Option B: Install JupyterLab extension in your IDE
 
 
 ## Troubleshooting
