@@ -1,6 +1,18 @@
 # Network Analysis
 
-This project cleans profile data, normalizes organization names, and prepares a graph-based analysis of relationships between people and institutions.
+This project turns messy professional profile data into a usable relationship map that helps identify influential organizations, talent pathways, and hidden institutional connections.
+
+Instead of treating records as isolated entries, it builds a network view that reveals:
+- which companies and schools act as key connectors,
+- where talent clusters form,
+- and which institutions are structurally important even when they are not the most frequent.
+
+## Why This Matters
+
+This analysis is useful for answering high-value questions such as:
+- Which organizations sit at the center of the network?
+- Which institutions connect otherwise separate communities?
+- Where do influential career transitions tend to happen?
 
 ## What This Project Does
 
@@ -98,3 +110,8 @@ Then open `Jupyter.ipynb` and run cells top-to-bottom.
    ```
 2. If imports from `src` fail, make sure you are running commands from the project root directory.
 3. If package installation fails, verify your Python version and update pip.
+
+## Demo
+If you want you can check out this walkthrough video recording
+
+https://drive.google.com/drive/u/0/folders/1bFNBqj4f65N8mlDtvmUXX2uAeln5o42K
